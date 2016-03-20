@@ -15,7 +15,7 @@ LDFLAGS = -g -lpthread -lz -lm -lrt -ldl -lcurl
 
 PRG = offshore
 SRC = main.cpp \
-#      options.cpp \
+      options.cpp \
 #      urlloader.cpp \
 #      urlcrawler.cpp \
 #      urllink.cpp \
