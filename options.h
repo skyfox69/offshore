@@ -32,6 +32,7 @@ class Options
 		string						_linkFileNameR;
 		string						_linkFileNameW;
 		string						_youtubeDlFileName;
+		string						_baseDir;
 		unsigned char				_recurseDepth = 0;
 		bool						_includeCss   = false;
 		bool						_includeJs    = false;

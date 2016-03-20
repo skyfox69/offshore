@@ -130,6 +130,9 @@ bool Options::parse(int argc, char** argv)
 		return usage();
 	}
 
+	//  set base directory
+	_baseDir = argv[optind];
+
 	return true;
 }
 

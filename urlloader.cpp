@@ -1,4 +1,5 @@
 #include "urlloader.h"
+#include "filehelper.h"
 #include <curl/curl.h>
 #include <sstream>
 #include <fstream>
@@ -72,13 +73,16 @@ string UrlLoader::readHtml(const string url)
 }
 
 //-----------------------------------------------------------------------------
-string UrlLoader::readImage(const string url, const string fileName)
+string UrlLoader::readImage(const string url)
 {
-	ofstream	oStream(fileName, ofstream::binary);
+	string		fileName(FileHelper::generateFileName(url));
+	ofstream	oStream (fileName, ofstream::binary);
 
-	read(url, oStream);
-	oStream.flush();
-	oStream.close();
+	if (oStream.good()) {
+		read(url, oStream);
+		oStream.flush();
+		oStream.close();
+	}
 	return fileName;
 }
 

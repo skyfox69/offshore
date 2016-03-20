@@ -23,8 +23,8 @@ class UrlLoader
 									UrlLoader();
 		virtual						~UrlLoader();
 
-		virtual	string				readHtml(const string url);
-		virtual	string				readImage(const string url, const string fileName);
+		virtual	string				readHtml (const string url);
+		virtual	string				readImage(const string url);
 };
 
 }  //  namespace Offshore
