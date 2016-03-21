@@ -6,7 +6,9 @@
 namespace Offshore {
 
 //-----------------------------------------------------------------------------
-UrlLink::UrlLink()
+UrlLink::UrlLink(const string link, const unsigned char depth)
+	:	_link (link),
+		_depth(depth)
 {}
 
 //-----------------------------------------------------------------------------

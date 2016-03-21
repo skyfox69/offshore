@@ -20,7 +20,9 @@ class FileLoader
 									FileLoader();
 		virtual						~FileLoader();
 
-		virtual	string				readHtml(const string url);
+		virtual	string				readHtml(const string url, const string fileName);
+
+		virtual	bool				writeHtml(const string html, const string fileName);
 };
 
 }  //  namespace Offshore

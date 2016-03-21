@@ -25,7 +25,7 @@ class UrlLink
 		string						_link;
 		unsigned char				_depth = 0;
 
-									UrlLink();
+									UrlLink(const string link = "", const unsigned char depth = 0);
 		virtual						~UrlLink();
 
 		virtual	string				slug();
