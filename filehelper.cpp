@@ -7,9 +7,15 @@ namespace Offshore {
 string FileHelper::generateFileName(const string url, const bool isImage)
 {
 	string	fileName(url);
-	size_t	pos     (0);
+	size_t	pos     (fileName.find('?'));
+
+	//  remove parameters
+	if (pos != string::npos) {
+		fileName = fileName.substr(0, pos);
+	}
 
 	//  remove http://
+	pos = 0;
 	while ((pos = fileName.find("http://", pos)) != string::npos) {
 		fileName.replace(pos, 7, "");
 	}
