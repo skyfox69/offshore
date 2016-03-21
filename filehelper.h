@@ -13,11 +13,14 @@
 using namespace std;
 
 namespace Offshore {
+
+class UrlLink;
+
 //-----------------------------------------------------------------------------
 class FileHelper
 {
 	public:
-		static	string				generateFileName(const string url);
+		static	string				generateFileName(const string url, const bool isImage = false);
 };
 
 }  //  namespace Offshore
