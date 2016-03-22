@@ -21,6 +21,7 @@ class FileLoader
 		virtual						~FileLoader();
 
 		virtual	string				readHtml(const string url, const string fileName);
+		virtual	bool				fileExists(const string fileName);
 
 		virtual	bool				writeHtml(const string html, const string fileName);
 };

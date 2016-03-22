@@ -21,6 +21,10 @@ SRC = main.cpp \
       urlloader.cpp \
       urllink.cpp \
       sitecrawler.cpp \
+<<<<<<< HEAD
+=======
+      pageanalyzer.cpp \
+>>>>>>> develop
 
 OBJ = ${SRC:%.cpp=%.o}
 

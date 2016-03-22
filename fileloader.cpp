@@ -1,6 +1,7 @@
 #include "fileloader.h"
 #include <sstream>
 #include <fstream>
+#include <sys/stat.h>
 
 namespace Offshore {
 
@@ -40,6 +41,14 @@ bool FileLoader::writeHtml(const string html, const string fileName)
 	}
 
 	return retVal;
+}
+
+//-----------------------------------------------------------------------------
+bool FileLoader::fileExists(const string fileName)
+{
+	struct stat		st = {0};
+
+	return (stat(fileName.c_str(), &st) != -1);
 }
 
 }  //  namespace Offshore

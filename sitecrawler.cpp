@@ -1,5 +1,6 @@
 #include "sitecrawler.h"
 #include "options.h"
+#include "pageanalyzer.h"
 #include <sys/stat.h>
 #include <vector>
 
@@ -8,17 +9,39 @@ namespace Offshore {
 //-----------------------------------------------------------------------------
 SiteCrawler::SiteCrawler()
 {
-	_pOptions = Options::getInstance();
+	_pOptions  = Options::getInstance();
+	_pAnalyzer = new PageAnalyzer(_mapLinks, _mapImages, _mapYoutube);
 }
 
 //-----------------------------------------------------------------------------
 SiteCrawler::~SiteCrawler()
-{}
+{
+	if (_pAnalyzer != nullptr)		delete _pAnalyzer;
+}
 
 //-----------------------------------------------------------------------------
-bool SiteCrawler::crawlRecursive(UrlLink& link, const unsigned char depth)
+int SiteCrawler::checkImages()
 {
-	vector<string>		tmpLinks;
+	int		downloaded(0);
+
+	//  if online allowed
+	if (!_pOptions->_localOnly) {
+		//  for each image
+		for (auto& image : _mapImages) {
+			if (!_fileLoader.fileExists(image.second.pathName())) {
+				fprintf(stderr, "### %s\n", image.second._link.c_str());
+				_urlLoader.readImage(image.second._link, image.second.pathName());
+			}
+		}  //  for (auto& image : _mapImages)
+	}  //  if (!_pOptions->_localOnly)
+
+	return downloaded;
+}
+
+//-----------------------------------------------------------------------------
+bool SiteCrawler::crawlRecursive(UrlLink& link)
+{
+	vector<string>		localLinks;
 	string				html;
 
 	//  get html form local file
@@ -32,13 +55,15 @@ bool SiteCrawler::crawlRecursive(UrlLink& link, const unsigned char depth)
 	fprintf(stderr, "size of %s: %ld\n", link._link.c_str(), html.size());
 
 	//  analyse links
+	_pAnalyzer->analyze(html, link._depth + 1, "href", localLinks);
+	_pAnalyzer->analyze(html, link._depth + 1, "src", localLinks);
 
 
 
 	//  recursive parse links
-	if (depth < _pOptions->_recurseDepth) {
-		for (auto& url : tmpLinks) {
-			crawlRecursive(_mapLinks[url], depth + 1);
+	if (link._depth < _pOptions->_recurseDepth) {
+		for (auto& url : localLinks) {
+			crawlRecursive(_mapLinks[url]);
 		}
 	}
 
@@ -69,15 +94,17 @@ bool SiteCrawler::crawl(const string url)
 	_mapLinks[tLink.slug()] = tLink;
 
 	//  recursive parse urls/links
-	crawlRecursive(_mapLinks[tLink.slug()], 0);
+	crawlRecursive(_mapLinks[tLink.slug()]);
 
-	
+	//  download images if online allowed
+	checkImages();
+
 
 
 
 	//  show list of links
 	if (_pOptions->_showLinks) {
-		fprintf(stderr, "\nfound links:\n");
+		fprintf(stderr, "\nfound links: (%d)\n", _mapLinks.size());
 		for (auto& link : _mapLinks) {
 			fprintf(stderr, "  %02d - %s\n", link.second._depth, link.first.c_str());
 		}
@@ -86,7 +113,7 @@ bool SiteCrawler::crawl(const string url)
 
 	//  show list of images
 	if (_pOptions->_showImages) {
-		fprintf(stderr, "\nfound images:\n");
+		fprintf(stderr, "\nfound images: (%d)\n", _mapImages.size());
 		for (auto& link : _mapImages) {
 			fprintf(stderr, "  %02d - %s\n", link.second._depth, link.first.c_str());
 		}
