@@ -22,6 +22,7 @@ SRC = main.cpp \
       urllink.cpp \
       sitecrawler.cpp \
       pageanalyzer.cpp \
+      pagelocalyzer.cpp \
 
 OBJ = ${SRC:%.cpp=%.o}
 
