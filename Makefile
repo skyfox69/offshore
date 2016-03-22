@@ -19,8 +19,8 @@ SRC = main.cpp \
       filehelper.cpp \
       fileloader.cpp \
       urlloader.cpp \
-#      urlcrawler.cpp \
-#      urllink.cpp \
+      urllink.cpp \
+      sitecrawler.cpp \
 
 OBJ = ${SRC:%.cpp=%.o}
 
