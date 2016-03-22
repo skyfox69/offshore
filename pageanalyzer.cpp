@@ -48,16 +48,20 @@ int PageAnalyzer::analyze(const string html, const unsigned char depth, const st
 
 			//  valid image
 			if (tmpLink.isValidImage()) {
-				_mapImages[tmpLink.slug()] = tmpLink;
+				if (_mapImages.count(tmpLink.slug()) <= 0) {
+					_mapImages[tmpLink.slug()] = tmpLink;
+				}
 			}
 			//  valid link
 			else if (tmpLink.isValidLink()) {
-				_mapLinks[tmpLink.slug()] = tmpLink;
-				localLinks.push_back(tmpLink.slug());
+				if (_mapLinks.count(tmpLink.slug()) <= 0) {
+					_mapLinks[tmpLink.slug()] = tmpLink;
+					localLinks.push_back(tmpLink.slug());
+				}
 			}
 
 			//  valid youtube
-			if (tmpLink.isValidYoutube()) {
+			if (tmpLink.isValidYoutube() && (_mapYoutube.count(tmpLink.slug()) <= 0)) {
 				_mapYoutube[tmpLink.slug()] = tmpLink;
 			}
 

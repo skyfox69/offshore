@@ -33,6 +33,7 @@ class SiteCrawler
 		map<string, UrlLink>		_mapYoutube;
 
 		virtual	bool				crawlRecursive(UrlLink& link);
+		virtual	int					checkImages();
 
 	public:
 									SiteCrawler();
