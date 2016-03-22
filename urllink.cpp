@@ -20,8 +20,17 @@ string UrlLink::slug()
 {
 	if (_slug.empty()) {
 		_slug = _link;
+
+		// remove trailing /
 		if (_slug.find_last_of('/') == (_slug.length() - 1)) {
 			_slug.pop_back();
+		}
+
+		//  remove parameters
+		size_t	pos(_slug.find('?'));
+
+		if (pos != string::npos) {
+			_slug = _slug.substr(0, pos);
 		}
 	}
 	return _slug;
@@ -56,12 +65,14 @@ bool UrlLink::isValidImage()
 	}
 
 	// check last 4 bytes
-	tString  = tString.substr(tString.length() - 4);
-	pText    = tString.c_str();
-	isValid |= (strcasecmp(pText, ".jpg") == 0);
-	isValid |= (strcasecmp(pText, ".png") == 0);
-	isValid |= (strcasecmp(pText, ".bmp") == 0);
-	isValid |= (strcasecmp(pText, ".gif") == 0);
+	if (tString.length() > 4) {
+		tString  = tString.substr(tString.length() - 4);
+		pText    = tString.c_str();
+		isValid |= (strcasecmp(pText, ".jpg") == 0);
+		isValid |= (strcasecmp(pText, ".png") == 0);
+		isValid |= (strcasecmp(pText, ".bmp") == 0);
+		isValid |= (strcasecmp(pText, ".gif") == 0);
+	}
 
 	return isValid;
 }
@@ -91,6 +102,16 @@ bool UrlLink::isValidLink()
 				break;
 			}
 		}
+	}
+
+	//  check js
+	if (isValid && !pOptions->_includeJs) {
+		isValid &= (_link.find(".js") == string::npos);
+	}
+
+	//  check css
+	if (isValid && !pOptions->_includeCss) {
+		isValid &= (_link.find(".css") == string::npos);
 	}
 
 	return isValid;

@@ -18,19 +18,21 @@ using namespace std;
 namespace Offshore {
 
 class	Options;
+class	PageAnalyzer;
 
 //-----------------------------------------------------------------------------
 class SiteCrawler
 {
 	protected:
 		Options*					_pOptions;
+		PageAnalyzer*				_pAnalyzer;
 		UrlLoader					_urlLoader;
 		FileLoader					_fileLoader;
 		map<string, UrlLink>		_mapLinks;
 		map<string, UrlLink>		_mapImages;
 		map<string, UrlLink>		_mapYoutube;
 
-		virtual	bool				crawlRecursive(UrlLink& link, const unsigned char depth);
+		virtual	bool				crawlRecursive(UrlLink& link);
 
 	public:
 									SiteCrawler();

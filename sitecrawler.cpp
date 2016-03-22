@@ -1,5 +1,6 @@
 #include "sitecrawler.h"
 #include "options.h"
+#include "pageanalyzer.h"
 #include <sys/stat.h>
 #include <vector>
 
@@ -8,17 +9,20 @@ namespace Offshore {
 //-----------------------------------------------------------------------------
 SiteCrawler::SiteCrawler()
 {
-	_pOptions = Options::getInstance();
+	_pOptions  = Options::getInstance();
+	_pAnalyzer = new PageAnalyzer(_mapLinks, _mapImages, _mapYoutube);
 }
 
 //-----------------------------------------------------------------------------
 SiteCrawler::~SiteCrawler()
-{}
+{
+	if (_pAnalyzer != nullptr)		delete _pAnalyzer;
+}
 
 //-----------------------------------------------------------------------------
-bool SiteCrawler::crawlRecursive(UrlLink& link, const unsigned char depth)
+bool SiteCrawler::crawlRecursive(UrlLink& link)
 {
-	vector<string>		tmpLinks;
+	vector<string>		localLinks;
 	string				html;
 
 	//  get html form local file
@@ -32,13 +36,15 @@ bool SiteCrawler::crawlRecursive(UrlLink& link, const unsigned char depth)
 	fprintf(stderr, "size of %s: %ld\n", link._link.c_str(), html.size());
 
 	//  analyse links
+	_pAnalyzer->analyze(html, link._depth + 1, "href", localLinks);
+	_pAnalyzer->analyze(html, link._depth + 1, "src", localLinks);
 
 
 
 	//  recursive parse links
-	if (depth < _pOptions->_recurseDepth) {
-		for (auto& url : tmpLinks) {
-			crawlRecursive(_mapLinks[url], depth + 1);
+	if (link._depth < _pOptions->_recurseDepth) {
+		for (auto& url : localLinks) {
+			crawlRecursive(_mapLinks[url]);
 		}
 	}
 
@@ -69,7 +75,7 @@ bool SiteCrawler::crawl(const string url)
 	_mapLinks[tLink.slug()] = tLink;
 
 	//  recursive parse urls/links
-	crawlRecursive(_mapLinks[tLink.slug()], 0);
+	crawlRecursive(_mapLinks[tLink.slug()]);
 
 	
 
