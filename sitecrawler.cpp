@@ -12,7 +12,7 @@ SiteCrawler::SiteCrawler()
 {
 	_pOptions   = Options::getInstance();
 	_pAnalyser  = new PageAnalyser (_mapLinks, _mapImages, _mapYoutube);
-	_pLocalyser = new PageLocalyser(_mapLinks, _mapImages, _mapYoutube);
+	_pLocalyser = new PageLocalyser(_mapLinks, _mapImages);
 }
 
 //-----------------------------------------------------------------------------
@@ -119,7 +119,7 @@ bool SiteCrawler::crawl(const string url)
 	}
 
 	//  localise pages
-	//_pLocalyser->tueWas()
+	_pLocalyser->localyse();
 
 	
 

@@ -20,12 +20,14 @@ class PageLocalyser
 	protected:
 		map<string, UrlLink>&		_mapLinks;
 		map<string, UrlLink>&		_mapImages;
-		map<string, UrlLink>&		_mapYoutube;
+
+		virtual	int					replaceAll(string& html, const string search, const string replace, const char match);
 
 	public:
-									PageLocalyser(map<string, UrlLink>& mapLink, map<string, UrlLink>& mapImg, map<string, UrlLink>& mapYt);
+									PageLocalyser(map<string, UrlLink>& mapLink, map<string, UrlLink>& mapImg);
 		virtual						~PageLocalyser();
 
+		virtual	int					localyse();
 };
 
 }  //  namespace Offshore
