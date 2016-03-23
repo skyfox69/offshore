@@ -1,21 +1,21 @@
-#include "pageanalyzer.h"
+#include "pageanalyser.h"
 #include "options.h"
 
 namespace Offshore {
 
 //-----------------------------------------------------------------------------
-PageAnalyzer::PageAnalyzer(map<string, UrlLink>& mapLink, map<string, UrlLink>& mapImg, map<string, UrlLink>& mapYt)
+PageAnalyser::PageAnalyser(map<string, UrlLink>& mapLink, map<string, UrlLink>& mapImg, map<string, UrlLink>& mapYt)
 	:	_mapLinks  (mapLink),
 		_mapImages (mapImg),
 		_mapYoutube(mapYt)
 {}
 
 //-----------------------------------------------------------------------------
-PageAnalyzer::~PageAnalyzer()
+PageAnalyser::~PageAnalyser()
 {}
 
 //-----------------------------------------------------------------------------
-int PageAnalyzer::analyze(const string html, const unsigned char depth, const string tag, vector<string>& localLinks)
+int PageAnalyser::analyse(const string html, const unsigned char depth, const string tag, vector<string>& localLinks)
 {
 	string	locTag  (tag + "=\"");
 	size_t	posStart(0);

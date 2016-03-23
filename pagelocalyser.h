@@ -1,12 +1,12 @@
 /* 
- * File:   pagelcalyzer.h
+ * File:   pagelcalyser.h
  * Author: fdueber
  *
  * Created on March 22, 2016, 8:45 PM
  */
 
-#ifndef PAGELOCALYZER_H
-#define PAGELOCALYZER_H
+#ifndef PAGELOCALYSER_H
+#define PAGELOCALYSER_H
 
 #include "urllink.h"
 #include <map>
@@ -15,7 +15,7 @@ using namespace std;
 
 namespace Offshore {
 //-----------------------------------------------------------------------------
-class PageLocalyzer
+class PageLocalyser
 {
 	protected:
 		map<string, UrlLink>&		_mapLinks;
@@ -23,10 +23,10 @@ class PageLocalyzer
 		map<string, UrlLink>&		_mapYoutube;
 
 	public:
-									PageLocalyzer(map<string, UrlLink>& mapLink, map<string, UrlLink>& mapImg, map<string, UrlLink>& mapYt);
-		virtual						~PageLocalyzer();
+									PageLocalyser(map<string, UrlLink>& mapLink, map<string, UrlLink>& mapImg, map<string, UrlLink>& mapYt);
+		virtual						~PageLocalyser();
 
 };
 
 }  //  namespace Offshore
-#endif  //  PAGELOCALYZER_H
+#endif  //  PAGELOCALYSER_H

@@ -11,7 +11,6 @@
 #include "fileloader.h"
 #include "urlloader.h"
 #include "urllink.h"
-#include "pagelocalizer.h"
 #include <map>
 
 using namespace std;
@@ -19,16 +18,16 @@ using namespace std;
 namespace Offshore {
 
 class	Options;
-class	PageAnalyzer;
-class	PageLocalyzer;
+class	PageAnalyser;
+class	PageLocalyser;
 
 //-----------------------------------------------------------------------------
 class SiteCrawler
 {
 	protected:
 		Options*					_pOptions;
-		PageAnalyzer*				_pAnalyzer;
-		PageLocalyzer*				_pLocalyzer;
+		PageAnalyser*				_pAnalyser;
+		PageLocalyser*				_pLocalyser;
 		UrlLoader					_urlLoader;
 		FileLoader					_fileLoader;
 		map<string, UrlLink>		_mapLinks;
