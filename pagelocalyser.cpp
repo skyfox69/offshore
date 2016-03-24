@@ -57,6 +57,8 @@ int PageLocalyser::localyse()
 
 			//  if valid html content
 			if (!html.empty()) {
+				fprintf(stderr, "processing: %s\n", link.slug().c_str());
+
 				//  backup File if wanted
 				if (!pOptions->_backupDir.empty()) {
 					string	backupPath(pOptions->_backupDir + "/" + link.fileName());
@@ -77,7 +79,7 @@ int PageLocalyser::localyse()
 
 					//  for each match
 					for (auto& match : matches) {
-						replaced += replaceAll(html, repEntry.second._link, repEntry.second.pathName(), match);
+						replaced += replaceAll(html, repEntry.second._link, repEntry.second.fileName(), match);
 					}
 				}  //  for (auto& repEntry : _mapLinks)
 
@@ -88,7 +90,7 @@ int PageLocalyser::localyse()
 
 					//  for each match
 					for (auto& match : matches) {
-						replaced += replaceAll(html, repEntry.second._link, repEntry.second.pathName(), match);
+						replaced += replaceAll(html, repEntry.second.slug(), repEntry.second.fileName(), match);
 					}
 				}  //  for (auto& repEntry : _mapLinks)
 				
