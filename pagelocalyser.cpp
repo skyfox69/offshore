@@ -1,4 +1,5 @@
 #include "pagelocalyser.h"
+#include "options.h"
 #include <vector>
 #include <fstream>
 #include <sstream>
@@ -33,6 +34,7 @@ int PageLocalyser::replaceAll(string& html, const string search, const string re
 //-----------------------------------------------------------------------------
 int PageLocalyser::localyse()
 {
+	Options*		pOptions(Options::getInstance());
 	vector<char>	matches = { '"', '\'', '?'};
 	int				replaced(0);
 
@@ -55,6 +57,19 @@ int PageLocalyser::localyse()
 
 			//  if valid html content
 			if (!html.empty()) {
+				//  backup File if wanted
+				if (!pOptions->_backupDir.empty()) {
+					string	backupPath(pOptions->_backupDir + "/" + link.fileName());
+
+					ofstream	outFile(backupPath, ofstream::binary);
+
+					if (outFile.good()) {
+						outFile.write(html.c_str(), html.length());
+						outFile.flush();
+						outFile.close();
+					}
+				}  //  if (!pOptions->_backupDir.empty())
+
 				//  localyse links
 				for (auto& repEntry : _mapLinks) {
 					//  skip empty link

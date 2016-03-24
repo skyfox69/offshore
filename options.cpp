@@ -29,8 +29,15 @@ bool Options::parse(int argc, char** argv)
 {
 	int		opt(0);
 	
-	while ((opt = getopt(argc, argv, "cd:D:e:E:hi:I:jl:o:r:Y:z:Z:")) != -1) {
+	while ((opt = getopt(argc, argv, "b:cd:D:e:E:hi:I:jl:o:r:Y:z:Z:")) != -1) {
 		switch (opt) {
+			case 'b':
+				if (*optarg == 0) {
+					printf("\x1B[31mPlease specify a backup directory!\033[0m\n");
+					return usage();
+				}
+				_backupDir = optarg;
+				break;
 			case 'c':
 				_includeCss = true;
 				break;

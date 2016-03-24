@@ -89,6 +89,14 @@ bool SiteCrawler::crawl(const string url)
 		mkdir(("./" + _pOptions->_baseDir).c_str(), 0775);
 	}
 
+	//  create backup directory
+	if (!_pOptions->_backupDir.empty()) {
+		if (stat(("./" + _pOptions->_backupDir).c_str(), &st) == -1) {
+			fprintf(stderr, "creating backup directory\n");
+			mkdir(("./" + _pOptions->_backupDir).c_str(), 0775);
+		}
+	}
+
 	//  insert initial link
 	UrlLink		tLink(url, 0);
 
