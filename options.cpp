@@ -29,7 +29,7 @@ bool Options::parse(int argc, char** argv)
 {
 	int		opt(0);
 	
-	while ((opt = getopt(argc, argv, "b:cd:D:e:E:hi:I:jl:o:r:Y:z:Z:")) != -1) {
+	while ((opt = getopt(argc, argv, "b:cd:D:e:E:hi:I:jl:o:r:t:T:Y:z:Z:")) != -1) {
 		switch (opt) {
 			case 'b':
 				if (*optarg == 0) {
@@ -106,6 +106,20 @@ bool Options::parse(int argc, char** argv)
 			case 'r':
 				_recurseDepth = atoi(optarg);
 				break;
+			case 't':
+				if (*optarg == 0) {
+					printf("\x1B[31mPlease specify an object identifier!\033[0m\n");
+					return usage();
+				}
+				_domExcludes[optarg] = optarg;
+				break;
+			case 'T':
+				if (*optarg == 0) {
+					printf("\x1B[31mPlease specify an object text file!\033[0m\n");
+					return usage();
+				}
+				parseFile(_domExcludes, optarg);
+				break;
 			case 'Y':
 				if (*optarg == 0) {
 					printf("\x1B[31mPlease specify a target file!\033[0m\n");
@@ -179,6 +193,8 @@ bool Options::usage()
 			"  -ll\t\tshow all referenced links\n"
 			"  -o0\t\tuse local files only, don't download anything\n"
 			"  -r DEPTH\trecursive follow links upto given depth\n"
+			"  -t TEXT\tremove DOM objects having TEXT. Tags, classes and ids are supported (multiple occurancy possible)\n"
+			"  -T FILE\tremove DOM objects defined in FILE. Tags, classes and ids are supported\n"
 			"  -Y FILE\twrite youtube links to FILE for use with youtube-dl\n"
 			"  -z FILE\tuse existing links-files defines within FILE\n"
 			"  -Z FILE\twrite links-files defines to FILE\n"

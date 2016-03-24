@@ -22,6 +22,10 @@ class PageLocalyser
 		map<string, UrlLink>&		_mapImages;
 
 		virtual	int					replaceAll(string& html, const string search, const string replace, const char match);
+		virtual	int					processDOMTree (string& html);
+		virtual	int					processDOMTag  (string& html, string tag);
+		virtual	int					processDOMId   (string& html, string id);
+		virtual	int					processDOMClass(string& html, string cls);
 
 	public:
 									PageLocalyser(map<string, UrlLink>& mapLink, map<string, UrlLink>& mapImg);

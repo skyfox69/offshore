@@ -32,6 +32,143 @@ int PageLocalyser::replaceAll(string& html, const string search, const string re
 }
 
 //-----------------------------------------------------------------------------
+int PageLocalyser::processDOMTag(string& html, string tag)
+{
+	int		processed(0);
+	size_t	posStart (0);
+	size_t	posEnd   (0);
+
+	while ((posStart = html.find('<' + tag, posStart)) != string::npos) {
+		posEnd = html.find(tag + '>', posStart+tag.length());
+		if (posEnd != string::npos) {
+			posEnd += (tag.length() + 1);
+			html.replace(posStart, posEnd - posStart, "");
+		}
+		
+		posStart = posEnd;
+
+	}  //  while ((posStart = html.find('<' + tag, posStart)) != string::npos)
+
+	return processed;
+}
+
+//-----------------------------------------------------------------------------
+int PageLocalyser::processDOMId(string& html, string id)
+{
+	string	tag;
+	int		processed(0);
+	size_t	posStart (0);
+	size_t	posEnd   (0);
+
+	while ((posStart = html.find("id=\"" + id + "\"", posStart)) != string::npos) {
+		//  find tag id belongs to
+		size_t	posDomStart(html.rfind('<', posStart));
+
+		if (posDomStart != string::npos) {
+			tag = html.substr(posDomStart+1, html.find(' ', posDomStart)-posDomStart-1);
+			if (!tag.empty()) {
+				int		openTags(1);
+
+				posStart = posDomStart + tag.length();
+				while ((posStart = html.find(tag, posStart)) != string::npos) {
+					if (html[posStart - 1] == '<') {
+						++openTags;
+						posStart += tag.length();
+					} else if (html[posStart - 1] == '/') {
+						--openTags;
+						if (openTags == 0) {
+							posEnd = html.find('>', posStart);
+							if (posEnd != string::npos) {
+								html.replace(posDomStart, posEnd - posDomStart+1, "");
+								posStart = posDomStart;
+								break;
+							}
+							posStart += tag.length();
+						} else {
+							posStart += tag.length();
+						}
+					}
+				}  //  while ((posStart = html.find(tag, posStart)) != string::npos)
+			}  //  if (!tag.empty())
+		}  //  if (posTStart != string::npos)
+
+		posStart = posEnd;
+
+	}  //  while ((posStart = html.find('<' + tag, posStart)) != string::npos)
+
+	return processed;
+}
+
+//-----------------------------------------------------------------------------
+int PageLocalyser::processDOMClass(string& html, string cls)
+{
+	string	tag;
+	int		processed(0);
+	size_t	posStart (0);
+	size_t	posEnd   (0);
+
+	while ((posStart = html.find("class=\"" + cls + "\"", posStart)) != string::npos) {
+		//  find tag id belongs to
+		size_t	posDomStart(html.rfind('<', posStart));
+
+		if (posDomStart != string::npos) {
+			tag = html.substr(posDomStart+1, html.find(' ', posDomStart)-posDomStart-1);
+			if (!tag.empty()) {
+				int		openTags(1);
+
+				posStart = posDomStart + tag.length();
+				while ((posStart = html.find(tag, posStart)) != string::npos) {
+					if (html[posStart - 1] == '<') {
+						++openTags;
+						posStart += tag.length();
+					} else if (html[posStart - 1] == '/') {
+						--openTags;
+						if (openTags == 0) {
+							posEnd = html.find('>', posStart);
+							if (posEnd != string::npos) {
+								html.replace(posDomStart, posEnd - posDomStart+1, "");
+								posStart = posDomStart;
+								break;
+							}
+							posStart += tag.length();
+						} else {
+							posStart += tag.length();
+						}
+					}
+				}  //  while ((posStart = html.find(tag, posStart)) != string::npos)
+			}  //  if (!tag.empty())
+		}  //  if (posTStart != string::npos)
+
+		posStart = posEnd;
+
+	}  //  while ((posStart = html.find('<' + tag, posStart)) != string::npos)
+
+	return processed;
+}
+
+//-----------------------------------------------------------------------------
+int PageLocalyser::processDOMTree(string& html)
+{
+	int		processed(0);
+
+	//  for each DOM exclusion
+	for (auto& exclude : Options::getInstance()->_domExcludes) {
+		switch (exclude.second[0]) {
+			case '.':		//  class
+				processed += processDOMClass(html, exclude.second.substr(1));
+				break;
+			case '#':		//  id
+				processed += processDOMId(html, exclude.second.substr(1));
+				break;
+			default:		//  tag
+				processed += processDOMTag(html, exclude.second);
+		}
+	}  //  for (auto& tag : Options::getInstance()->_domExcludes)
+
+	return processed;
+}
+
+//-----------------------------------------------------------------------------
 int PageLocalyser::localyse()
 {
 	Options*		pOptions(Options::getInstance());
@@ -93,7 +230,12 @@ int PageLocalyser::localyse()
 						replaced += replaceAll(html, repEntry.second.slug(), repEntry.second.fileName(), match);
 					}
 				}  //  for (auto& repEntry : _mapLinks)
-				
+
+				//  process DOM-tree if wanted
+				if (!pOptions->_domExcludes.empty()) {
+					processDOMTree(html);
+				}
+
 				//  write mofified content
 				ofstream	outFile(link.pathName(), ofstream::binary);
 

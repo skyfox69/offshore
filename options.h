@@ -29,6 +29,7 @@ class Options
 		map<string, string>			_linkIncludes;
 		map<string, string>			_linkExcludes;
 		map<string, string>			_imageIncludes;
+		map<string, string>			_domExcludes;
 		string						_linkFileNameR;
 		string						_linkFileNameW;
 		string						_youtubeDlFileName;
