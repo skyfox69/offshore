@@ -180,6 +180,7 @@ bool Options::usage()
 {
 	printf("\nUsage: offshore [options] TARGET URL\n"
 			"Download URL to local file.\n\n"
+			"  -b DIR\tsave backup copy to DIR before parsing\n"
 			"  -c\t\tinclude CSS files\n"
 			"  -d TEXT\tdownload images/movies containing TEXT in path (multiple occurancy possible)\n"
 			"  -D FILE\tdownload images/movies containing texts defined in FILE\n"
