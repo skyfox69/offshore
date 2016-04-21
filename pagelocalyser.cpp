@@ -73,7 +73,6 @@ int PageLocalyser::processDOMId(string& html, string id)
 				while ((posStart = html.find(tag, posStart)) != string::npos) {
 					if (html[posStart - 1] == '<') {
 						++openTags;
-						posStart += tag.length();
 					} else if (html[posStart - 1] == '/') {
 						--openTags;
 						if (openTags == 0) {
@@ -83,11 +82,9 @@ int PageLocalyser::processDOMId(string& html, string id)
 								posStart = posDomStart;
 								break;
 							}
-							posStart += tag.length();
-						} else {
-							posStart += tag.length();
 						}
 					}
+					posStart += tag.length();
 				}  //  while ((posStart = html.find(tag, posStart)) != string::npos)
 			}  //  if (!tag.empty())
 		}  //  if (posTStart != string::npos)
@@ -120,7 +117,6 @@ int PageLocalyser::processDOMClass(string& html, string cls)
 				while ((posStart = html.find(tag, posStart)) != string::npos) {
 					if (html[posStart - 1] == '<') {
 						++openTags;
-						posStart += tag.length();
 					} else if (html[posStart - 1] == '/') {
 						--openTags;
 						if (openTags == 0) {
@@ -130,11 +126,9 @@ int PageLocalyser::processDOMClass(string& html, string cls)
 								posStart = posDomStart;
 								break;
 							}
-							posStart += tag.length();
-						} else {
-							posStart += tag.length();
 						}
 					}
+					posStart += tag.length();
 				}  //  while ((posStart = html.find(tag, posStart)) != string::npos)
 			}  //  if (!tag.empty())
 		}  //  if (posTStart != string::npos)

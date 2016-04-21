@@ -30,7 +30,11 @@ string FileHelper::generateFileName(const string url, const bool isImage)
 	replace(fileName.begin(), fileName.end(), '/', '_');
 
 	//  replace . with _
-	replace(fileName.begin(), fileName.end(), '.', '_');
+	if (!isImage) {
+		replace(fileName.begin(), fileName.end(), '.', '_');
+	} else {
+		replace(fileName.begin(), fileName.end() - 5, '.', '_');
+	}
 
 	//  append .html if not set
 	if (!isImage && (fileName.find_last_of(".html") != (fileName.length() - 5))) {
