@@ -167,7 +167,8 @@ int PageLocalyser::localyse()
 {
 	Options*		pOptions(Options::getInstance());
 	vector<char>	matches = { '"', '\'', '?'};
-	int				replaced(0);
+	int				replaced   (0);
+	int				replacedOld(0);
 
 	//  for each link/file
 	for (auto& entry : _mapLinks) {
@@ -203,6 +204,11 @@ int PageLocalyser::localyse()
 					}
 				}  //  if (!pOptions->_backupDir.empty())
 
+				//  process DOM-tree if wanted
+				if (!pOptions->_domExcludes.empty()) {
+					processDOMTree(html);
+				}
+
 				//  localyse links
 				for (auto& repEntry : _mapLinks) {
 					//  skip empty link
@@ -210,7 +216,7 @@ int PageLocalyser::localyse()
 
 					//  for each match
 					for (auto& match : matches) {
-						replaced += replaceAll(html, repEntry.second._link, repEntry.second.fileName(), match);
+						replaced   += replaceAll(html, repEntry.second._link, repEntry.second.fileName(), match);
 					}
 				}  //  for (auto& repEntry : _mapLinks)
 
@@ -221,14 +227,13 @@ int PageLocalyser::localyse()
 
 					//  for each match
 					for (auto& match : matches) {
+						replacedOld = replaced;
 						replaced += replaceAll(html, repEntry.second.slug(), repEntry.second.fileName(), match);
+						if (replaced != replacedOld) {
+							repEntry.second._used = true;
+						}
 					}
 				}  //  for (auto& repEntry : _mapLinks)
-
-				//  process DOM-tree if wanted
-				if (!pOptions->_domExcludes.empty()) {
-					processDOMTree(html);
-				}
 
 				//  write mofified content
 				ofstream	outFile(link.pathName(), ofstream::binary);

@@ -42,6 +42,8 @@ class Options
 		bool						_parseHeader  = false;
 		bool						_showImages   = false;
 		bool						_showLinks    = false;
+		bool						_showUnused   = false;
+		bool						_removeUnused = false;
 
 		virtual						~Options();
 		static	Options*			getInstance();

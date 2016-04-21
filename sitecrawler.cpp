@@ -129,6 +129,29 @@ bool SiteCrawler::crawl(const string url)
 	//  localise pages
 	_pLocalyser->localyse();
 
+	//  show list of unused images
+	if (_pOptions->_showUnused) {
+		fprintf(stderr, "\nunused images:\n");
+		for (auto& link : _mapImages) {
+			if (!link.second._used) {
+				fprintf(stderr, "  %02d - %s\n", link.second._depth, link.first.c_str());
+			}
+		}
+		fprintf(stderr, "\n");
+	}
+
+	//  remove unused images
+	if (_pOptions->_removeUnused) {
+		fprintf(stderr, "\ndeleting unused images:\n");
+		for (auto& link : _mapImages) {
+			if (!link.second._used) {
+				remove(link.second.pathName().c_str());
+				fprintf(stderr, "  deleted: %s\n", link.second.pathName().c_str());
+			}
+		}
+		fprintf(stderr, "\n");
+	}
+
 	
 
 

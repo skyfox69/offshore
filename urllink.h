@@ -23,6 +23,7 @@ class UrlLink
 
 	public:
 		string						_link;
+		bool						_used  = false;
 		unsigned char				_depth = 0;
 
 									UrlLink(const string link = "", const unsigned char depth = 0);

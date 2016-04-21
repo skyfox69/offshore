@@ -29,7 +29,7 @@ bool Options::parse(int argc, char** argv)
 {
 	int		opt(0);
 	
-	while ((opt = getopt(argc, argv, "b:cd:D:e:E:hi:I:jl:o:r:t:T:Y:z:Z:")) != -1) {
+	while ((opt = getopt(argc, argv, "b:cd:D:e:E:hi:I:jl:o:r:t:T:xY:z:Z:")) != -1) {
 		switch (opt) {
 			case 'b':
 				if (*optarg == 0) {
@@ -94,6 +94,8 @@ bool Options::parse(int argc, char** argv)
 					_showLinks = true;
 				} else if (*optarg == 'i') {
 					_showImages = true;
+				} else if (*optarg == 'v') {
+					_showUnused = true;
 				} else {
 					return usage();
 				}
@@ -119,6 +121,9 @@ bool Options::parse(int argc, char** argv)
 					return usage();
 				}
 				parseFile(_domExcludes, optarg);
+				break;
+			case 'x':
+				_removeUnused = true;
 				break;
 			case 'Y':
 				if (*optarg == 0) {
@@ -192,11 +197,13 @@ bool Options::usage()
 			"  -j\t\tinclude JavaScript files\n"
 			"  -li\t\tshow all referenced images\n"
 			"  -ll\t\tshow all referenced links\n"
+			"  -lv\t\tshow all unused images\n"
 			"  -o0\t\tuse local files only, don't download anything\n"
 			"  -r DEPTH\trecursive follow links upto given depth\n"
 			"  -t TEXT\tremove DOM objects having TEXT. Tags, classes and ids are supported (multiple occurancy possible)\n"
 			"  -T FILE\tremove DOM objects defined in FILE. Tags, classes and ids are supported\n"
 			"  -Y FILE\twrite youtube links to FILE for use with youtube-dl\n"
+			"  -x\t\tremove unused images\n"
 			"  -z FILE\tuse existing links-files defines within FILE\n"
 			"  -Z FILE\twrite links-files defines to FILE\n"
 			"\n"
